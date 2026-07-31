@@ -1,0 +1,19 @@
+"To create local class go tio local types from downside and type lcl and press ctrl+space then press enter and remove create private header from class definition
+"Add required attributes to your class and press F@ to hceck if there is any error
+*"* use this source file for the definition and implementation of
+*"* local helper classes, interface definitions and type
+*"* declarations
+CLASS lcl_connection DEFINITION.
+
+  PUBLIC SECTION.
+    DATA carrier_id TYPE /dmo/carrier_id. "Instance attribute
+    DATA connection_id TYPE /dmo/connection_id. "Instance attribute
+    CLASS-DATA conn_counter TYPE i. "Static attribute
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+ENDCLASS.
+
+CLASS lcl_connection IMPLEMENTATION.
+
+ENDCLASS.
