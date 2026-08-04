@@ -1,4 +1,6 @@
 "How to create multiple instances using one statement repeatedly becaus eit will create differenent copies of object wheather we are creating object with same name everytime.
+" If we don't write create object statement and trying to assign new avlues and then try to append then it willnot append it will result to store one vlaue only. 
+" so eriting statemnet againa and again will result to create a copy of same objects
 CLASS zcl_7417_instances DEFINITION
   PUBLIC
   FINAL
