@@ -47,8 +47,14 @@ CLASS zcl_7417_methods IMPLEMENTATION.
     APPEND connection TO connections.
     "THIRD INSTANCE
     connection = NEW #( ).
-    connection->carrier_id = 'BA'.
-    connection->connection_id = '0500'.
+   TRY.
+        connection->set_attributes(
+        EXPORTING i_carrierid = 'BA'
+        i_connectionid = '0500'
+        ).
+      CATCH cx_abap_invalid_value.
+        out->write( 'Invalid Value' ).
+    ENDTRY.
     APPEND connection TO connections.
     LOOP AT connections INTO DATA(conn).
       out->write( conn->get_output( ) ).
