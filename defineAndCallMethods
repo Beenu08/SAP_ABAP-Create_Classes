@@ -1,0 +1,99 @@
+"In this excersie we learned how to create objects, Raise exception, handle exception, call exception, creating internal table of class type, how to declare methods, call methods, implement them.
+"Global Class
+CLASS zcl_7417_methods DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
+
+  PUBLIC SECTION.
+
+    INTERFACES if_oo_adt_classrun .
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+
+CLASS zcl_7417_methods IMPLEMENTATION.
+
+
+  METHOD if_oo_adt_classrun~main.
+    DATA connections  TYPE TABLE OF REF TO lcl_connection.
+    DATA connection TYPE REF TO lcl_connection. "declare a reference variable
+    "FIRST INSTANCE
+    connection = NEW #( ). "create of object of lcl_connection class
+*    CREATE OBJECT connection. "old way
+    TRY.
+        connection->set_attributes(
+            EXPORTING i_carrierid = 'LH'
+            i_connectionid = '0400' ).
+      CATCH cx_abap_invalid_value.
+        out->write( 'Invalid value' ).
+    ENDTRY.
+
+*    connection->carrier_id = 'LH'.
+*    connection->connection_id = '0400'.
+    APPEND connection TO connections.
+    "SECOND INSTANCE
+    connection = NEW #( ).
+    TRY.
+        connection->set_attributes( EXPORTING i_Carrierid = 'RH'
+        i_connectionid = '0300' ).
+      CATCH cx_abap_invalid_value.
+        out->write( 'Invalid Value' ).
+    ENDTRY.
+*    connection->carrier_id = 'RH'.
+*    connection->connection_id = '0300'.
+    APPEND connection TO connections.
+    "THIRD INSTANCE
+    connection = NEW #( ).
+    connection->carrier_id = 'BA'.
+    connection->connection_id = '0500'.
+    APPEND connection TO connections.
+    LOOP AT connections INTO DATA(conn).
+      out->write( conn->get_output( ) ).
+    ENDLOOP.
+  ENDMETHOD.
+ENDCLASS.
+
+
+"Local Class
+*"* use this source file for the definition and implementation of
+*"* local helper classes, interface definitions and type
+*"* declarations
+CLASS lcl_connection DEFINITION.
+
+  PUBLIC SECTION.
+    DATA carrier_id TYPE /dmo/carrier_id. "Instance attribute
+    DATA connection_id TYPE /dmo/connection_id. "Instance attribute
+    CLASS-DATA conn_counter TYPE i. "Static attribute
+    METHODS get_output RETURNING VALUE(r_output)  TYPE string_table.
+    METHODS set_attributes IMPORTING
+                                     i_carrierid    TYPE /dmo/carrier_id
+                                     i_connectionid TYPE /dmo/connection_id
+                           RAISING   cx_abap_invalid_value.
+  PROTECTED SECTION.
+  PRIVATE SECTION.
+
+ENDCLASS.
+
+CLASS lcl_connection IMPLEMENTATION.
+
+
+  METHOD get_output.
+    APPEND |------------------------------| TO r_output.
+    APPEND |Carrier: { carrier_id }| TO r_output.
+    APPEND |Connection: { connection_id }| TO r_output.
+
+  ENDMETHOD.
+
+  METHOD set_attributes.
+    IF i_Carrierid IS INITIAL AND i_connectionid IS INITIAL.
+      RAISE EXCEPTION TYPE cx_abap_invalid_value.
+    ENDIF.
+    carrier_id = i_carrierid.
+    connection_id = i_connectionid.
+
+  ENDMETHOD.
+
+ENDCLASS.
